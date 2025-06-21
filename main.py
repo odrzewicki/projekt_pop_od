@@ -7,7 +7,6 @@ root = Tk()
 root.title("System Parkingowy")
 root.geometry("1300x900")
 
-# ==================== RAMKI GÓRNE ====================
 frame_top = Frame(root)
 frame_top.pack(pady=10)
 
@@ -23,11 +22,12 @@ frame_user.grid(row=0, column=2, padx=10)
 frame_maps = Frame(root)
 frame_maps.pack(pady=20)
 
-# ==================== FUNKCJE DODAWANIA ====================
-
+# ==================== LISTY OBIEKTÓW ====================
 parkings = []
 workers = []
 users = []
+
+# ==================== FUNKCJE DODAWANIA ====================
 
 def add_parking():
     name = entry_parking_name.get()
@@ -60,6 +60,26 @@ def add_user():
     entry_user_parking.delete(0, END)
     entry_user_location.delete(0, END)
 
+# ==================== SZCZEGÓŁY ====================
+
+def show_parking_details():
+    i = listbox_parkings.curselection()
+    if i:
+        selected = parkings[i[0]]
+        label_parking_details.config(text=f"Lokalizacja: {selected.location}")
+
+def show_worker_details():
+    i = listbox_workers.curselection()
+    if i:
+        selected = workers[i[0]]
+        label_worker_details.config(text=f"Parking: {selected.parking}, Lokalizacja: {selected.location}")
+
+def show_user_details():
+    i = listbox_users.curselection()
+    if i:
+        selected = users[i[0]]
+        label_user_details.config(text=f"Parking: {selected.parking}, Lokalizacja: {selected.location}")
+
 # ==================== FORMULARZE ====================
 
 # Parking
@@ -73,6 +93,9 @@ entry_parking_location.grid(row=2, column=1)
 Button(frame_parking, text="Dodaj", command=add_parking).grid(row=3, column=0, columnspan=2, pady=5)
 listbox_parkings = Listbox(frame_parking, width=30, height=5)
 listbox_parkings.grid(row=4, column=0, columnspan=2)
+Button(frame_parking, text="Szczegóły", command=show_parking_details).grid(row=5, column=0, columnspan=2)
+label_parking_details = Label(frame_parking, text="...")
+label_parking_details.grid(row=6, column=0, columnspan=2)
 
 # Pracownik
 Label(frame_worker, text="Dodaj pracownika").grid(row=0, column=0, columnspan=2)
@@ -88,6 +111,9 @@ entry_worker_location.grid(row=3, column=1)
 Button(frame_worker, text="Dodaj", command=add_worker).grid(row=4, column=0, columnspan=2, pady=5)
 listbox_workers = Listbox(frame_worker, width=30, height=5)
 listbox_workers.grid(row=5, column=0, columnspan=2)
+Button(frame_worker, text="Szczegóły", command=show_worker_details).grid(row=6, column=0, columnspan=2)
+label_worker_details = Label(frame_worker, text="...")
+label_worker_details.grid(row=7, column=0, columnspan=2)
 
 # Użytkownik
 Label(frame_user, text="Dodaj użytkownika").grid(row=0, column=0, columnspan=2)
@@ -103,6 +129,9 @@ entry_user_location.grid(row=3, column=1)
 Button(frame_user, text="Dodaj", command=add_user).grid(row=4, column=0, columnspan=2, pady=5)
 listbox_users = Listbox(frame_user, width=30, height=5)
 listbox_users.grid(row=5, column=0, columnspan=2)
+Button(frame_user, text="Szczegóły", command=show_user_details).grid(row=6, column=0, columnspan=2)
+label_user_details = Label(frame_user, text="...")
+label_user_details.grid(row=7, column=0, columnspan=2)
 
 # ==================== MAPY ====================
 
@@ -125,7 +154,7 @@ map_user.grid(row=1, column=2, padx=5)
 map_user.set_position(52.23, 21.01)
 map_user.set_zoom(6)
 
-# ==================== WSTĘPNE DANE ====================
+# ==================== DANE STARTOWE ====================
 
 for p in parkings_data:
     obj = Parking(p["parking_name"], p["parking_location"], map_parking)
