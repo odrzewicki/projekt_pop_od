@@ -26,6 +26,7 @@ parkings, workers, users = [], [], []
 
 # ============ FUNKCJE ============
 
+# --- PARKING ---
 def add_parking():
     name = entry_parking_name.get()
     location = entry_parking_location.get()
@@ -37,8 +38,58 @@ def add_parking():
     entry_parking_name.delete(0, END)
     entry_parking_location.delete(0, END)
 
-# ============ FORMULARZ PARKING ============
+def show_parking_details():
+    selected = listbox_parkings.curselection()
+    if not selected:
+        return
+    obj = parkings[selected[0]]
+    label_parking_details.config(text=f"Lokalizacja: {obj.location}")
 
+# --- WORKER ---
+def add_worker():
+    name = entry_worker_name.get()
+    parking = entry_worker_parking.get()
+    location = entry_worker_location.get()
+    if not name or not parking or not location:
+        return
+    obj = Worker(name, parking, location, map_worker)
+    workers.append(obj)
+    listbox_workers.insert(END, obj.name)
+    entry_worker_name.delete(0, END)
+    entry_worker_parking.delete(0, END)
+    entry_worker_location.delete(0, END)
+
+def show_worker_details():
+    selected = listbox_workers.curselection()
+    if not selected:
+        return
+    obj = workers[selected[0]]
+    label_worker_details.config(text=f"Parking: {obj.parking}, Lokalizacja: {obj.location}")
+
+# --- USER ---
+def add_user():
+    name = entry_user_name.get()
+    parking = entry_user_parking.get()
+    location = entry_user_location.get()
+    if not name or not parking or not location:
+        return
+    obj = User(name, parking, location, map_user)
+    users.append(obj)
+    listbox_users.insert(END, obj.name)
+    entry_user_name.delete(0, END)
+    entry_user_parking.delete(0, END)
+    entry_user_location.delete(0, END)
+
+def show_user_details():
+    selected = listbox_users.curselection()
+    if not selected:
+        return
+    obj = users[selected[0]]
+    label_user_details.config(text=f"Parking: {obj.parking}, Lokalizacja: {obj.location}")
+
+# ============ FORMULARZE ============
+
+# --- PARKING ---
 Label(frame_parking, text="Dodaj parking").grid(row=0, column=0, columnspan=2)
 Label(frame_parking, text="Nazwa:").grid(row=1, column=0)
 entry_parking_name = Entry(frame_parking)
@@ -49,10 +100,11 @@ entry_parking_location.grid(row=2, column=1)
 Button(frame_parking, text="Dodaj", command=add_parking).grid(row=3, column=0, columnspan=2, pady=5)
 listbox_parkings = Listbox(frame_parking, width=30, height=5)
 listbox_parkings.grid(row=4, column=0, columnspan=2)
-# (Szczegóły i Edytuj będą dodane w kolejnym kroku)
+Button(frame_parking, text="Szczegóły", command=show_parking_details).grid(row=5, column=0, columnspan=2)
+label_parking_details = Label(frame_parking, text="...")
+label_parking_details.grid(row=6, column=0, columnspan=2)
 
-# ============ POZOSTAŁE FORMULARZE (bez zmian) ============
-
+# --- WORKER ---
 Label(frame_worker, text="Dodaj pracownika").grid(row=0, column=0, columnspan=2)
 Label(frame_worker, text="Imię i nazwisko:").grid(row=1, column=0)
 entry_worker_name = Entry(frame_worker)
@@ -63,11 +115,14 @@ entry_worker_parking.grid(row=2, column=1)
 Label(frame_worker, text="Lokalizacja:").grid(row=3, column=0)
 entry_worker_location = Entry(frame_worker)
 entry_worker_location.grid(row=3, column=1)
-button_worker_add = Button(frame_worker, text="Dodaj")  # bez logiki jeszcze
-button_worker_add.grid(row=4, column=0, columnspan=2, pady=5)
+Button(frame_worker, text="Dodaj", command=add_worker).grid(row=4, column=0, columnspan=2, pady=5)
 listbox_workers = Listbox(frame_worker, width=30, height=5)
 listbox_workers.grid(row=5, column=0, columnspan=2)
+Button(frame_worker, text="Szczegóły", command=show_worker_details).grid(row=6, column=0, columnspan=2)
+label_worker_details = Label(frame_worker, text="...")
+label_worker_details.grid(row=7, column=0, columnspan=2)
 
+# --- USER ---
 Label(frame_user, text="Dodaj użytkownika").grid(row=0, column=0, columnspan=2)
 Label(frame_user, text="Imię i nazwisko:").grid(row=1, column=0)
 entry_user_name = Entry(frame_user)
@@ -78,10 +133,12 @@ entry_user_parking.grid(row=2, column=1)
 Label(frame_user, text="Lokalizacja:").grid(row=3, column=0)
 entry_user_location = Entry(frame_user)
 entry_user_location.grid(row=3, column=1)
-button_user_add = Button(frame_user, text="Dodaj")  # bez logiki jeszcze
-button_user_add.grid(row=4, column=0, columnspan=2, pady=5)
+Button(frame_user, text="Dodaj", command=add_user).grid(row=4, column=0, columnspan=2, pady=5)
 listbox_users = Listbox(frame_user, width=30, height=5)
 listbox_users.grid(row=5, column=0, columnspan=2)
+Button(frame_user, text="Szczegóły", command=show_user_details).grid(row=6, column=0, columnspan=2)
+label_user_details = Label(frame_user, text="...")
+label_user_details.grid(row=7, column=0, columnspan=2)
 
 # ============ MAPY ============
 
