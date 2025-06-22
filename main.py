@@ -1,10 +1,12 @@
 from tkinter import *
 import tkintermapview
+from tkinter import messagebox
 from models import Parking, Worker, User
 from init_data import parkings_data, workers_data, users_data
 from geo_utils import get_coordinates
 
 root = Tk()
+root.configure(bg="#e6f2ff")  # np. jasnoniebieski
 root.title("System Parkingowy")
 root.geometry("1300x900")
 
@@ -80,6 +82,12 @@ def add_worker():
     location = entry_worker_location.get()
     if not name or not parking or not location:
         return
+
+    # Sprawdzenie czy parking istnieje
+    if parking not in [p.name for p in parkings]:
+        messagebox.showerror("Błąd", "Nie ma takiego parkingu.")
+        return
+
     obj = Worker(name, parking, location, map_worker)
     workers.append(obj)
     listbox_workers.insert(END, obj.name)
@@ -134,6 +142,12 @@ def add_user():
     location = entry_user_location.get()
     if not name or not parking or not location:
         return
+
+    # Sprawdzenie czy parking istnieje
+    if parking not in [p.name for p in parkings]:
+        messagebox.showerror("Błąd", "Nie ma takiego parkingu.")
+        return
+
     obj = User(name, parking, location, map_user)
     users.append(obj)
     listbox_users.insert(END, obj.name)
@@ -198,6 +212,9 @@ Button(frame_parking, text="Szczegóły", command=show_parking_details).grid(row
 Button(frame_parking, text="Edytuj", command=edit_parking).grid(row=6, column=0, columnspan=2)
 label_parking_details = Label(frame_parking, text="...")
 label_parking_details.grid(row=7, column=0, columnspan=2)
+
+# Dodaj pusty label dla zachowania proporcji
+Label(frame_parking).grid(row=8, column=0, columnspan=2)
 
 # WORKER
 Label(frame_worker, text="Dodaj pracownika").grid(row=0, column=0, columnspan=2)
